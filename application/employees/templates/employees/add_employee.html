@@ -1,0 +1,18 @@
+{% extends 'employees/base.html' %}
+
+{% block title %}
+    Wafi HR Solution | Add Employee
+{% endblock title %}
+
+{% block body %}
+    <div class="m-5">
+        <h1>Add Employee</h1>        
+
+        <form method="post" enctype="multipart/form-data" class="form-control">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-success">Save employee</button>
+        </form>
+    </div>
+{% endblock body %}

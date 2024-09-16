@@ -1,0 +1,17 @@
+{% extends 'employees/base.html' %}
+
+{% block title %}
+    Wafi HR Solution | Delete Employee
+{% endblock title %}
+
+{% block body %}
+    <div class="m-5">
+        <h3>Are you sure you want to delete "{{ employee.full_name }}"?</h3>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="ms-3 btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'employee_list' %}">No, Go Back</a>
+        </form>
+    </div>
+{% endblock body %}

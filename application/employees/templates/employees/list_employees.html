@@ -1,0 +1,80 @@
+{% extends 'employees/base.html' %}
+
+{% block title %}
+    Wafi HR Solution | Employee List
+{% endblock title %}
+
+{% block body %}
+    <!-- Search form -->
+    <div class='border rounded my-3'>
+        <form method="get" action="" class="m-3">
+            <input type="text" name="full_name" placeholder="Name" value="{{ request.GET.full_name }}" class="ms-5">
+            <input type="text" name="email" placeholder="Email" value="{{ request.GET.email }}" class="ms-5">
+            <input type="text" name="mobile" placeholder="Mobile" value="{{ request.GET.mobile }}" class="ms-5">
+            <input type="date" name="date_of_birth" placeholder="Date of Birth" value="{{ request.GET.date_of_birth }}" class="ms-5">
+            <button type="submit" class="me-5 text-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+    </div>
+
+    <!-- Employee table -->
+    <table class="table table-bordered text-center align-middle">
+        <thead >
+            <tr >
+                <th>Photo</th>
+                <th><a href="?{% if request.GET.full_name %}full_name={{ request.GET.full_name }}&{% endif %}{% if request.GET.email %}email={{ request.GET.email }}&{% endif %}{% if request.GET.mobile %}mobile={{ request.GET.mobile }}&{% endif %}{% if request.GET.date_of_birth %}date_of_birth={{ request.GET.date_of_birth }}&{% endif %}sort_by=full_name&order={% if request.GET.order == 'asc' %}desc{% else %}asc{% endif %}">Name<i class="fa-solid fa-sort me-2"></i></a></th>
+                <th><a href="?{% if request.GET.full_name %}full_name={{ request.GET.full_name }}&{% endif %}{% if request.GET.email %}email={{ request.GET.email }}&{% endif %}{% if request.GET.mobile %}mobile={{ request.GET.mobile }}&{% endif %}{% if request.GET.date_of_birth %}date_of_birth={{ request.GET.date_of_birth }}&{% endif %}sort_by=email&order={% if request.GET.order == 'asc' %}desc{% else %}asc{% endif %}">Email<i class="fa-solid fa-sort me-2"></i></a></th>
+                <th><a href="?{% if request.GET.full_name %}full_name={{ request.GET.full_name }}&{% endif %}{% if request.GET.email %}email={{ request.GET.email }}&{% endif %}{% if request.GET.mobile %}mobile={{ request.GET.mobile }}&{% endif %}{% if request.GET.date_of_birth %}date_of_birth={{ request.GET.date_of_birth }}&{% endif %}sort_by=mobile&order={% if request.GET.order == 'asc' %}desc{% else %}asc{% endif %}">Mobile<i class="fa-solid fa-sort me-2"></i></a></th>
+                <th><a href="?{% if request.GET.full_name %}full_name={{ request.GET.full_name }}&{% endif %}{% if request.GET.email %}email={{ request.GET.email }}&{% endif %}{% if request.GET.mobile %}mobile={{ request.GET.mobile }}&{% endif %}{% if request.GET.date_of_birth %}date_of_birth={{ request.GET.date_of_birth }}&{% endif %}sort_by=date_of_birth&order={% if request.GET.order == 'asc' %}desc{% else %}asc{% endif %}">Date of Birth<i class="fa-solid fa-sort me-2"></i></a></th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td>
+                    {% if employee.photo %}
+                        <img src="{{ employee.photo.url }}" alt="Photo" width="50" height="50">
+                    {% else %}
+                        No photo
+                    {% endif %}
+                </td>
+                <td>{{ employee.full_name }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.mobile }}</td>
+                <td>{{ employee.date_of_birth|date:"d/m/Y" }}</td>
+
+                <td>
+                    <a href="{% url 'edit_employee' employee.pk %}"><i class="fa-solid fa-pen-to-square ms-3"></i></a>
+                    <a href="{% url 'delete_employee' employee.pk %}"><i class="fa-solid fa-trash"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No employees found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination justify-content-center">
+        {% if is_paginated %}
+            <span class="step-links mb-2">                
+                {% if page_obj.has_previous %}
+                <a class="current mx-2" href="?page=1{% if request.GET.full_name %}&full_name={{ request.GET.full_name }}{% endif %}{% if request.GET.date_of_birth %}&date_of_birth={{ request.GET.date_of_birth }}{% endif %}{% if request.GET.email %}&email={{ request.GET.email }}{% endif %}{% if request.GET.mobile %}&mobile={{ request.GET.mobile }}{% endif %}">&laquo; First Page</a>
+                <a class="current mx-2" href="?page={{ page_obj.previous_page_number }}{% if request.GET.full_name %}&full_name={{ request.GET.full_name }}{% endif %}{% if request.GET.date_of_birth %}&date_of_birth={{ request.GET.date_of_birth }}{% endif %}{% if request.GET.email %}&email={{ request.GET.email }}{% endif %}{% if request.GET.mobile %}&mobile={{ request.GET.mobile }}{% endif %}">&laquo; Previous</a>
+                {% endif %}
+                
+                <span class="current mx-2">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+            
+                {% if page_obj.has_next %}
+                    <a class="current mx-2" href="?page={{ page_obj.next_page_number }}{% if request.GET.full_name %}&full_name={{ request.GET.full_name }}{% endif %}{% if request.GET.date_of_birth %}&date_of_birth={{ request.GET.date_of_birth }}{% endif %}{% if request.GET.email %}&email={{ request.GET.email }}{% endif %}{% if request.GET.mobile %}&mobile={{ request.GET.mobile }}{% endif %}">Next Page &raquo;</a>
+                    <a class="current mx-2" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.full_name %}&full_name={{ request.GET.full_name }}{% endif %}{% if request.GET.date_of_birth %}&date_of_birth={{ request.GET.date_of_birth }}{% endif %}{% if request.GET.email %}&email={{ request.GET.email }}{% endif %}{% if request.GET.mobile %}&mobile={{ request.GET.mobile }}{% endif %}">Last Page &raquo;</a>
+                {% endif %}
+            </span>
+        {% endif %}
+    </div>
+{% endblock body %}
+
